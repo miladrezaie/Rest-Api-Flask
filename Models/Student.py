@@ -1,14 +1,9 @@
-
 from passlib.handlers.bcrypt import bcrypt
-
 import env
 from Models import mainModel
 from Models.mainModel import EnumField
 from peewee import IntegerField, TextField, CharField, PrimaryKeyField
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
-
-
-
 
 class Student(mainModel.BaseModel):
     firstname = CharField()
@@ -38,13 +33,11 @@ class Student(mainModel.BaseModel):
     def verify_password(self, password):
         return bcrypt.verify(password, self.password)
 
-
     # create token
     def generate_auth_token(self, expiration=600):
         s = Serializer(env.secret_key, expires_in=expiration)
         return s.dumps({'id': self.id})
 
-    @staticmethod
     def verify_auth_token(token):
         # check as secretkey with token
         s = Serializer(env.secret_key)
@@ -58,5 +51,4 @@ class Student(mainModel.BaseModel):
             user = Student.get(Student.id == data['id'])
             return user
         except:
-            return None #not find id
-
+            return None  # not find id

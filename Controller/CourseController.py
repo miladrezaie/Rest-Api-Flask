@@ -1,4 +1,6 @@
 from flask_restful import Resource, reqparse, abort
+from flask import g
+from Models import ChoiceCourse
 from Models.Courses import Course
 
 from Auth.Auth import auth2
@@ -18,3 +20,12 @@ class list(Resource):
             list_prerequisite=c.list_prerequisite,
         ) for c in courses]
         return dict(courses=ls)
+
+
+class Delete(Resource):
+    @auth2.login_required
+    def delete(self):
+        return dict(
+            status=ChoiceCourse.delete().where(
+                ChoiceCourse.Student_student_number_id == g.user.student_number).execute()
+        )

@@ -2,6 +2,7 @@ from flask import g
 from flask_restful import Resource
 from Auth.Auth import auth
 
+
 #
 # class Login(Resource):
 #     @auth.login_required
